@@ -169,7 +169,7 @@ export default function App() {
     <div className="app-shell">
       <header className="page-header">
         <div className="brand">
-          <img src="/image.png" alt="logo" className="brand-mark" />
+          <img src={import.meta.env.BASE_URL + 'image.png'} alt="logo" className="brand-mark" />
           <div>
             <p className="brand-label">CCAF Practice</p>
             <h1>Mock Test Drill</h1>
