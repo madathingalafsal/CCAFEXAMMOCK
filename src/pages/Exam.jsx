@@ -12,7 +12,7 @@ function initSelections() {
 
 function loadSession() {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     return JSON.parse(raw);
   } catch {
@@ -21,11 +21,11 @@ function loadSession() {
 }
 
 function saveSession(data) {
-  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
 }
 
 function clearSession() {
-  try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+  try { localStorage.removeItem(STORAGE_KEY); } catch {}
 }
 
 export default function Exam({ onHome }) {

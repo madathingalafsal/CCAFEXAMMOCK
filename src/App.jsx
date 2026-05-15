@@ -3,7 +3,7 @@ import Landing from './pages/Landing';
 import Practice from './pages/Practice';
 import Exam from './pages/Exam';
 
-const hasExamSession = () => !!sessionStorage.getItem('ccaf_exam_session');
+const hasExamSession = () => !!localStorage.getItem('ccaf_exam_session');
 
 export default function App() {
   const [screen, setScreen] = useState(hasExamSession() ? 'exam' : 'landing');
