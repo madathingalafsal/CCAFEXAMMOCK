@@ -4,18 +4,39 @@ import questionsData from '../../questions.json';
 import { EXAM_DURATION, formatTime } from '../utils';
 
 const LOGO = import.meta.env.BASE_URL + 'image.png';
+const STORAGE_KEY = 'ccaf_exam_session';
 
 function initSelections() {
   return questionsData.map(() => null);
 }
 
+function loadSession() {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function saveSession(data) {
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+
+function clearSession() {
+  try { sessionStorage.removeItem(STORAGE_KEY); } catch {}
+}
+
 export default function Exam({ onHome }) {
-  const [index, setIndex] = useState(0);
-  const [selections, setSelections] = useState(initSelections);
-  const [timeLeft, setTimeLeft] = useState(EXAM_DURATION);
+  const saved = loadSession();
+
+  const [index, setIndex] = useState(saved?.index ?? 0);
+  const [selections, setSelections] = useState(saved?.selections ?? initSelections());
+  const [timeLeft, setTimeLeft] = useState(saved?.timeLeft ?? EXAM_DURATION);
   const [running, setRunning] = useState(true);
-  const [blurred, setBlurred] = useState(false);
-  const [summary, setSummary] = useState(false);
+  const [blurred, setBlurred] = useState(saved ? true : false);
+  const [summary, setSummary] = useState(saved?.summary ?? false);
 
   // Countdown timer
   useEffect(() => {
@@ -27,10 +48,16 @@ export default function Exam({ onHome }) {
   // Auto-submit when time runs out
   useEffect(() => {
     if (timeLeft === 0 && !summary) {
+      clearSession();
       setRunning(false);
       setSummary(true);
     }
   }, [timeLeft, summary]);
+
+  // Persist session on every state change
+  useEffect(() => {
+    if (!summary) saveSession({ index, selections, timeLeft, summary });
+  }, [index, selections, timeLeft, summary]);
 
   // Blur + pause on tab switch
   useEffect(() => {
@@ -59,8 +86,15 @@ export default function Exam({ onHome }) {
   }
 
   function restart() {
+    clearSession();
     setIndex(0); setSelections(initSelections()); setTimeLeft(EXAM_DURATION);
     setRunning(true); setBlurred(false); setSummary(false);
+  }
+
+  function abandon() {
+    clearSession();
+    setRunning(false);
+    onHome();
   }
 
   return (
@@ -192,7 +226,7 @@ export default function Exam({ onHome }) {
             {allAnswered ? 'Finish & score' : `${unanswered} unanswered`}
           </button>
 
-          <button type="button" onClick={() => { setRunning(false); onHome(); }}
+          <button type="button" onClick={abandon}
             className="w-full py-3 bg-white border border-hairline rounded-xl font-semibold cursor-pointer hover:bg-card transition-colors">
             Abandon exam
           </button>
@@ -226,7 +260,7 @@ export default function Exam({ onHome }) {
               {didPass ? ' Great work — you passed the 72% threshold.' : ' Keep studying and try again.'}
             </p>
             <div className="flex flex-col gap-3">
-              <button type="button" onClick={() => { setRunning(false); onHome(); }}
+              <button type="button" onClick={abandon}
                 className="py-3 bg-white border border-hairline rounded-xl font-semibold cursor-pointer hover:bg-card transition-colors">
                 Back to home
               </button>

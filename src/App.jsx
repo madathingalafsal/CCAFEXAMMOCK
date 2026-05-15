@@ -3,8 +3,10 @@ import Landing from './pages/Landing';
 import Practice from './pages/Practice';
 import Exam from './pages/Exam';
 
+const hasExamSession = () => !!sessionStorage.getItem('ccaf_exam_session');
+
 export default function App() {
-  const [screen, setScreen] = useState('landing');
+  const [screen, setScreen] = useState(hasExamSession() ? 'exam' : 'landing');
 
   if (screen === 'practice') return <Practice onHome={() => setScreen('landing')} />;
   if (screen === 'exam') return <Exam onHome={() => setScreen('landing')} />;
