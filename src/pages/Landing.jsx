@@ -44,7 +44,7 @@ export default function Landing({ onPractice, onExam }) {
           <img src={import.meta.env.BASE_URL + 'image.png'} alt="logo" className="w-16 h-16 object-contain" />
           <div>
             <p className="text-xs tracking-widest uppercase text-muted font-semibold mb-0.5">CCAF Practice</p>
-            <h1 className="text-4xl font-serif font-normal leading-tight tracking-tight m-0">Mock Test Drill</h1>
+            <h1 className="text-4xl font-serif font-normal leading-tight tracking-tight m-0">Claude Certified Architect — Foundations</h1>
           </div>
         </div>
 

@@ -76,7 +76,7 @@ export default function Practice({ onHome }) {
           <img src={LOGO} alt="logo" className="w-10 h-10 object-contain" />
           <div>
             <p className="text-xs tracking-widest uppercase text-muted font-semibold m-0">CCAF Practice</p>
-            <h1 className="text-2xl font-serif font-normal leading-tight m-0">Mock Test Drill</h1>
+            <h1 className="text-2xl font-serif font-normal leading-tight m-0">Claude Certified Architect — Foundations</h1>
           </div>
         </div>
 
