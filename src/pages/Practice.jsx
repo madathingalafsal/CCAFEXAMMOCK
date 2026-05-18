@@ -63,7 +63,9 @@ export default function Practice({ onHome }) {
 
   function handleCopy() {
     if (!navigator.clipboard) { setCopyStatus('Not supported'); return; }
-    navigator.clipboard.writeText(question.text)
+    const options = question.options.map(o => `${o.letter}. ${o.text}`).join('\n');
+    const text = `${question.text}\n\n${options}`;
+    navigator.clipboard.writeText(text)
       .then(() => setCopyStatus('Copied'))
       .catch(() => setCopyStatus('Failed'));
   }
